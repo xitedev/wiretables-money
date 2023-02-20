@@ -10,7 +10,7 @@
 >
     <div class="flex w-full"
          x-data="{
-            amount: '',
+            amount: 0,
             value: @entangle($attributes->wire('model')),
             currency: 'USD',
             update() {
@@ -18,7 +18,9 @@
                     parsedValue = JSON.parse(this.value);
                     this.amount = Number.parseInt(parsedValue.amount) / 100;
                     this.currency = parsedValue.currency;
-                } catch (e) { console.log(e) };
+                } catch (e) {
+                    console.log(e);
+                };
             },
             updateCurrency() {
                 try {

@@ -9,6 +9,7 @@ use Brick\Money\Money;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use JsonException;
 use RuntimeException;
 use Throwable;
 use Xite\WiretablesMoney\Traits\IsMoneyTrait;
@@ -31,7 +32,7 @@ class MoneyCast implements CastsAttributes
      */
     public function get(Model $model, string $key, mixed $value, array $attributes):? Money
     {
-        return Money::ofMinor($value, $this->getCurrencyValue($attributes));
+        return Money::ofMinor((int)$value, $this->getCurrencyValue($attributes));
     }
 
     public function set(Model $model, string $key, mixed $value, array $attributes): array
@@ -46,7 +47,7 @@ class MoneyCast implements CastsAttributes
             if (array_key_exists($this->currency, $attributes)) {
                 return [
                     $key => $moneyValue->getMinorAmount()->toInt(),
-                    $this->currency => $moneyValue->getCurrency(),
+                    $this->currency => $moneyValue->getCurrency()->getCurrencyCode(),
                 ];
             }
 
@@ -57,6 +58,17 @@ class MoneyCast implements CastsAttributes
             throw new RuntimeException($exception->getMessage());
         }
    }
+
+    /**
+     * @throws JsonException
+     */
+    public function serialize($model, string $key, $value, array $attributes): string
+    {
+        return json_encode([
+            'amount' => $value->getMinorAmount()->toInt(),
+            'currency' => $value->getCurrency()->getCurrencyCode()
+        ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
+    }
 
     private function getCurrencyValue($attributes)
     {

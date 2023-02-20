@@ -2,9 +2,9 @@
 
 namespace Xite\WiretablesMoney\FormFields;
 
-use Xite\Wireforms\Components\Fields\Money;
 use Xite\Wireforms\Contracts\FieldContract;
 use Xite\Wireforms\FormFields\FormField;
+use Xite\WiretablesMoney\Components\Fields\Money;
 
 class MoneyField extends FormField
 {
