@@ -65,7 +65,7 @@ class MoneyCast implements CastsAttributes
     public function serialize($model, string $key, $value, array $attributes): string
     {
         return json_encode([
-            'amount' => $value->getMinorAmount()->toInt(),
+            'amount' => $value->getAmount()->toFloat(),
             'currency' => $value->getCurrency()->getCurrencyCode()
         ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
     }

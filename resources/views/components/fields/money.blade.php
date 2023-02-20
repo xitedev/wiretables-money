@@ -16,7 +16,7 @@
             update() {
                 try {
                     parsedValue = JSON.parse(this.value);
-                    this.amount = Number.parseInt(parsedValue.amount) / 100;
+                    this.amount = Number.parseInt(parsedValue.amount);
                     this.currency = parsedValue.currency;
                 } catch (e) {
                     console.log(e);
@@ -32,7 +32,7 @@
          x-init="
              update();
              $watch('amount', value => (value && currency) && $wire.emitSelf('updatedChild', '{{ $id }}', {
-                amount: Number.parseFloat(value * 100).toFixed(0),
+                amount: Number.parseFloat(value).toFixed(2),
                 currency: currency
              }))
          "
